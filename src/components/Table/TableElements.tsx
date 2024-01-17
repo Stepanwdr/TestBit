@@ -33,11 +33,15 @@ export const TableHeader = styled.div`
   color: #9CA3AF;
   text-align: center;
   width: 100%;
-  padding: 14px;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &:first-child {
     border-bottom-left-radius: 8px;
     border-top-left-radius: 8px;
   }
+
   &:last-child {
     border-bottom-right-radius: 8px;
     border-top-right-radius: 8px;
@@ -56,13 +60,13 @@ export const TableCell = styled.div`
   height: 60px;
 `;
 
-export const TableHeaderRow=styled(TableRow)`
-    border-bottom: none;
+export const TableHeaderRow = styled(TableRow)`
+  border-bottom: none;
 `
 
 export const BodyWrapper = styled.div<{ $height?: string }>`
   overflow-y: auto;
-  height: ${({ $height }) => `calc(100vh - ${$height})`};
+  height: ${({$height}) => `calc(100vh - ${$height})`};
   width: 100%;
   display: flex;
   flex-direction: column;

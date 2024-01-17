@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import styled from 'styled-components';
 import {User} from "../../types/user";
 import Pagination from "../Pagination/Pagination";
-import {useFetchUsersQuery} from '../../hooks/queries/useFetchUsersQuery';
+
 import {
     BodyWrapper,
     TableBody,
@@ -14,13 +14,15 @@ import {
     TableWrapper
 } from './TableElements';
 import SvgSelector from '../SvgSelector/SvgSelector';
+import useFetchUsersQuery from '../../hooks/queries/useFetchUsersQuery';
 
 
 const UserTable: FC = () => {
-    const [currentPage, setCurrentPage] = useState(1)
-    const {data, page, isLoading} = useFetchUsersQuery()
+    const [page, setPage] = useState(1)
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    const {data, totalPages, isLoading} = useFetchUsersQuery({order, page})
     const onPageChange = (page: number) => {
-        setCurrentPage(page)
+        setPage(page)
     }
     return (
         <TableWrapper>
@@ -30,7 +32,12 @@ const UserTable: FC = () => {
                     <TableHeader>Имя</TableHeader>
                     <TableHeader>Роль</TableHeader>
                     <TableHeader>Подписка</TableHeader>
-                    <TableHeader>Токены</TableHeader>
+                    <TableHeader>
+                        Токены
+                        <OrderBtn onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}>
+                            <SvgSelector id={order === 'asc' ? 'arrowTop' : 'arrowDown'}/>
+                        </OrderBtn>
+                    </TableHeader>
                     <TableHeader>Действия</TableHeader>
                 </TableHeaderRow>
             </TableRowHead>
@@ -63,7 +70,7 @@ const UserTable: FC = () => {
                 </BodyWrapper>
             </TableBody>
             <TableFooter>
-                <Pagination totalPages={data.length} onPageChange={onPageChange} currentPage={currentPage}/>
+                <Pagination totalPages={totalPages} onPageChange={onPageChange} currentPage={page}/>
             </TableFooter>
         </TableWrapper>
     );
@@ -97,4 +104,10 @@ const Email = styled.p`
   min-width: 170px;
   min-height: 22px;
   white-space: nowrap;
+`
+const OrderBtn = styled.button`
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
 `
