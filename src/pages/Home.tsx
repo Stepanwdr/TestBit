@@ -1,10 +1,38 @@
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 import UserTable from "../components/Table/UsersTable";
 import styled from "styled-components";
 import {UserSearcher} from "../components/UserSearcher/UserSearcher";
+import useDebounce from "../hooks/custom/useDebounce";
+import useFetchUsersQuery from "../hooks/queries/useFetchUsersQuery";
+import {User} from "../types/user";
+import useFetchTransActions from "../hooks/queries/useFetchTransActions";
+import {EditUserDrawer} from "../components/EditUserDrawer/EditUserDrawer";
 
 
 export const Home: FC = () => {
+    const [page, setPage] = useState(1)
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+    const [searchValue, setSearchValue] = useState('')
+    const [userToEdit,setUserToEdit]=useState<User | null>(null)
+    const debouncedSearch = useDebounce(searchValue, 500);
+    const {data, totalPages, isLoading} = useFetchUsersQuery({order, page, searchValue: debouncedSearch})
+
+    const [isOpen,setIsOpen]=useState(false)
+
+
+    const toggleDrawer = () => {
+        setIsOpen(prevState => !prevState)
+    }
+
+    const onPageChange = (page: number) => {
+        setPage(page)
+    }
+
+   const onUserEdit=(user:User)=>{
+       setUserToEdit(user)
+       setIsOpen(prevState => !prevState)
+   }
+
     return <Container>
         <PageTitle>
             <Title>
@@ -16,10 +44,20 @@ export const Home: FC = () => {
                 Пользователи
             </Title>
         </TableTitle>
-        <UserSearcher/>
-         <TableContainer>
-             <UserTable/>
-         </TableContainer>
+        <UserSearcher onChange={setSearchValue}/>
+        <TableContainer>
+            <UserTable
+                onPageChange={onPageChange}
+                data={data}
+                page={page}
+                totalPages={totalPages}
+                isLoading={isLoading}
+                order={order}
+                setOrder={setOrder}
+                onUserEdit={onUserEdit}
+            />
+           <EditUserDrawer user={userToEdit!} toggleDrawer={toggleDrawer} isOpen={isOpen}/>
+        </TableContainer>
     </Container>;
 };
 const Container = styled.div`
@@ -45,6 +83,6 @@ const PageTitle = styled(Row)``
 const TableTitle = styled(Row)`
   border-bottom: none;
 `
-const TableContainer=styled.div`
-margin:  0 34px;
+const TableContainer = styled.div`
+  margin: 0 34px;
 `

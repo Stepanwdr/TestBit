@@ -26,6 +26,12 @@ export const TableRow = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--darktheme-Gray-scale-Gray-3, #222B44);
+
+  .date {
+    display: flex;
+    flex-direction: column;
+    line-height: 18px;
+  }
 `;
 
 export const TableHeader = styled.div`
@@ -37,6 +43,7 @@ export const TableHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
   &:first-child {
     border-bottom-left-radius: 8px;
     border-top-left-radius: 8px;
@@ -71,3 +78,11 @@ export const BodyWrapper = styled.div<{ $height?: string }>`
   display: flex;
   flex-direction: column;
 `;
+export const NotData = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+`

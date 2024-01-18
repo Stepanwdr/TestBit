@@ -5,14 +5,15 @@ import {User} from "../../types/user";
 interface useFetchUsersQueryProps {
     order: 'asc' | 'desc'
     page: number
+    searchValue: string
 }
 
-const useFetchUsersQuery = ({order, page}: useFetchUsersQueryProps) => {
+const useFetchUsersQuery = ({order, page, searchValue}: useFetchUsersQueryProps) => {
     const [data, setData] = useState<User[]>([]);
     const [totalPages, setTotalPages] = useState(page);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    console.log(page,"sdsd")
+
     useEffect(() => {
         const getUsers = async () => {
             try {
@@ -20,7 +21,7 @@ const useFetchUsersQuery = ({order, page}: useFetchUsersQueryProps) => {
                 const response = await axios.get<{
                     data: User[],
                     pages: number
-                }>(`https://test.gefara.xyz/api/v1/user/list?page=${page}&orderBy=tokens%3A${order}`);
+                }>(`https://test.gefara.xyz/api/v1/user/list?page=${page}&search=${searchValue}&orderBy=tokens%3A${order}`);
                 setData(response.data.data);
                 setTotalPages(response.data.pages);
                 setIsLoading(false);
@@ -32,7 +33,7 @@ const useFetchUsersQuery = ({order, page}: useFetchUsersQueryProps) => {
         };
 
         getUsers();
-    }, [page, order]);
+    }, [page, order, searchValue]);
 
     return {
         data,

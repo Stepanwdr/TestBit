@@ -1,10 +1,11 @@
-import React, {FC, useState} from 'react';
+import React, {Dispatch, FC, useState} from 'react';
 import styled from 'styled-components';
 import {User} from "../../types/user";
 import Pagination from "../Pagination/Pagination";
 
 import {
     BodyWrapper,
+    NotData,
     TableBody,
     TableCell,
     TableHeader,
@@ -14,16 +15,26 @@ import {
     TableWrapper
 } from './TableElements';
 import SvgSelector from '../SvgSelector/SvgSelector';
-import useFetchUsersQuery from '../../hooks/queries/useFetchUsersQuery';
 
+interface UserTableProps {
+    order: 'asc' | 'desc'
+    isLoading: boolean
+    totalPages: number
+    data: User[]
+    page: number
+    onPageChange: (page: number) => void
+    setOrder:Dispatch<'asc' | 'desc'>
+    onUserEdit:(user:User)=>void
+}
 
-const UserTable: FC = () => {
-    const [page, setPage] = useState(1)
-    const [order, setOrder] = useState<'asc' | 'desc'>('asc')
-    const {data, totalPages, isLoading} = useFetchUsersQuery({order, page})
-    const onPageChange = (page: number) => {
-        setPage(page)
-    }
+const UserTable: FC<UserTableProps> = ({
+                                           order,
+                                           setOrder,
+                                           isLoading,
+                                           totalPages,
+                                           data, page, onPageChange,onUserEdit
+                                       }) => {
+
     return (
         <TableWrapper>
             <TableRowHead>
@@ -43,7 +54,7 @@ const UserTable: FC = () => {
             </TableRowHead>
             <TableBody>
                 <BodyWrapper $height={'548px'}>
-                    {data && data.length > 0 && data.slice(14).map((user: User) => (
+                    {data && data.length > 0 ? data.slice(0, 6).map((user: User) => (
                         <TableRow key={user.id}>
                             <TableCell>
                                 <Email>
@@ -53,10 +64,10 @@ const UserTable: FC = () => {
                             <TableCell>{user.name}</TableCell>
                             <TableCell>{user.role === 'USER' ? 'Пользователь' : 'Администратор'}</TableCell>
                             <TableCell>{user.subscription.plan.type}</TableCell>
-                            <TableCell>{user.subscription.tokens}</TableCell>
+                            <TableCell>{user.subscription.tokens} TKN</TableCell>
                             <TableCell>
                                 <ActionButtons>
-                                    <ActionButton>
+                                    <ActionButton onClick={()=>onUserEdit(user)}>
                                         <SvgSelector id={'edit'}/>
                                     </ActionButton>
                                     <ActionButton>
@@ -66,11 +77,12 @@ const UserTable: FC = () => {
 
                             </TableCell>
                         </TableRow>
-                    ))}
+                    )) : <NotData>Данные не найдены </NotData>}
                 </BodyWrapper>
             </TableBody>
             <TableFooter>
-                <Pagination totalPages={totalPages} onPageChange={onPageChange} currentPage={page}/>
+                {totalPages > 1 ?
+                    <Pagination totalPages={totalPages} onPageChange={onPageChange} currentPage={page}/> : ""}
             </TableFooter>
         </TableWrapper>
     );
