@@ -43,8 +43,10 @@ export const TableHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  &:nth-child(n+3) {
-    display: none;
+  @media only screen and (max-width: 425px) {
+    &:nth-child(n+3) {
+      display: none;
+    }
   }
   &:first-child {
     border-bottom-left-radius: 8px;
