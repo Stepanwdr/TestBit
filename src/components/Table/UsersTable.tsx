@@ -116,6 +116,15 @@ const Email = styled.p`
   min-width: 170px;
   min-height: 22px;
   white-space: nowrap;
+  @media only screen and (max-width: 768px) { 
+    width: 114px !important;
+    min-width: 106px !important;
+  }
+
+  @media only screen and (min-width: 769px) { 
+    width: 170px !important;
+    min-width: 170px !important;
+  }
 `
 const OrderBtn = styled.button`
   border: none;

@@ -43,7 +43,9 @@ export const TableHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
+  &:nth-child(n+3) {
+    display: none;
+  }
   &:first-child {
     border-bottom-left-radius: 8px;
     border-top-left-radius: 8px;
@@ -65,6 +67,11 @@ export const TableCell = styled.div`
   align-items: center;
   justify-content: center;
   height: 60px;
+  @media only screen and (max-width: 425px) {
+    &:nth-child(n+3) {
+      display: none;
+    }
+  }
 `;
 
 export const TableHeaderRow = styled(TableRow)`

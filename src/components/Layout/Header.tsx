@@ -3,10 +3,7 @@ import styled from "styled-components";
 import {NavBar} from './NavBar';
 import SvgSelector from "../SvgSelector/SvgSelector";
 
-interface HeaderProps {
-};
-
-export const Header: FC<HeaderProps> = () => {
+export const Header: FC= () => {
     return <Wrapper>
         <Logo>BitTest</Logo>
         <NavBar/>
@@ -46,6 +43,9 @@ const AdminNav = styled.div`
   gap: 12px;
   margin-left: auto;
   cursor: pointer;
+  @media only screen and (max-width: 425px) {
+  display: none;
+  }
 `
 const Role = styled.p`
   font-size: 14px;
