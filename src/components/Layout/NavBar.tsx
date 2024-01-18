@@ -17,6 +17,8 @@ export const NavBar: FC<NavBarProps> = () => {
 const Menu = styled.ul`
   display: flex;
   align-items: center;
+  justify-self: flex-start;
+  align-content: flex-start;
 `
 
 const MenuItem = styled.li`
